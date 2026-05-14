@@ -1,0 +1,9 @@
+Link : https://leetcode.com/problems/binary-number-with-alternating-bits/?envType=daily-question&envId=2026-05-13
+
+class Solution {
+    public boolean hasAlternatingBits(int n) {
+        int allOnes = n ^ (n >> 1);
+        
+        return (allOnes & (allOnes + 1)) == 0;
+    }
+}

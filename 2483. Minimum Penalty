@@ -1,0 +1,25 @@
+Link : https://leetcode.com/problems/minimum-penalty-for-a-shop/submissions/?envType=daily-question&envId=2026-05-13
+
+class Solution {
+    public int bestClosingTime(String customers) {
+        int minPenaltyGain = 0;
+        int currentPenaltyGain = 0;
+        int earliestHour = 0;
+
+        for (int i = 0; i < customers.length(); i++) {
+            char c = customers.charAt(i);
+            if (c == 'Y') {
+                currentPenaltyGain--;
+            } else {
+                currentPenaltyGain++;
+            }
+
+            if (currentPenaltyGain < minPenaltyGain) {
+                minPenaltyGain = currentPenaltyGain;
+                earliestHour = i + 1;
+            }
+        }
+
+        return earliestHour;
+    }
+}

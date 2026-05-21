@@ -1,0 +1,49 @@
+Link: https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/submissions/?envType=daily-question&envId=2026-05-20
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+class Solution {
+    public int[][] minAbsDiff(int[][] grid, int k) {
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        int resRows = m - k + 1;
+        int resCols = n - k + 1;
+        int[][] ans = new int[resRows][resCols];
+        
+        for (int i = 0; i < resRows; i++) {
+            for (int j = 0; j < resCols; j++) {
+                ans[i][j] = getMinAbsDiffForSubmatrix(grid, i, j, k);
+            }
+        }
+        
+        return ans;
+    }
+    
+    private int getMinAbsDiffForSubmatrix(int[][] grid, int startRow, int startCol, int k) {
+        List<Integer> elements = new ArrayList<>();
+        
+        for (int r = startRow; r < startRow + k; r++) {
+            for (int c = startCol; c < startCol + k; c++) {
+                elements.add(grid[r][c]);
+            }
+        }
+        
+        Collections.sort(elements);
+        
+        int minDiff = Integer.MAX_VALUE;
+        boolean foundDistinct = false;
+        
+        for (int i = 1; i < elements.size(); i++) {
+            int diff = elements.get(i) - elements.get(i - 1);
+            if (diff > 0) { // Ensures elements are distinct
+                minDiff = Math.min(minDiff, diff);
+                foundDistinct = true;
+            }
+        }
+        
+        return foundDistinct ? minDiff : 0;
+    }
+}

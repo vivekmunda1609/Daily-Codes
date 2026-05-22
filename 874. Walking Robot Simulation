@@ -1,0 +1,43 @@
+Link : https://leetcode.com/problems/walking-robot-simulation/submissions/?envType=daily-question&envId=2026-05-20
+
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        
+        Set<String> obstacleSet = new HashSet<>();
+        for (int[] obs : obstacles) {
+            obstacleSet.add(obs[0] + "," + obs[1]);
+        }
+        
+        int x = 0, y = 0; 
+        int d = 0;       
+        int maxDistSq = 0;
+        
+        for (int cmd : commands) {
+            if (cmd == -1) {
+                d = (d + 1) % 4;
+            } else if (cmd == -2) {
+                d = (d + 3) % 4;
+            } else {
+                for (int step = 0; step < cmd; step++) {
+                    int nextX = x + directions[d][0];
+                    int nextY = y + directions[d][1];
+                    
+                    if (obstacleSet.contains(nextX + "," + nextY)) {
+                    break ;
+                    }
+                    
+                    x = nextX;
+                    y = nextY;
+                    
+                    maxDistSq = Math.max(maxDistSq, x * x + y * y);
+                }
+            }
+        }
+        
+        return maxDistSq;
+    }
+}

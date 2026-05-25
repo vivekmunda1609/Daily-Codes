@@ -1,0 +1,21 @@
+Link : https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/submissions/?envType=daily-question&envId=2026-05-20
+
+import java.util.Arrays;
+
+class Solution {
+    public int[] sortByBits(int[] arr) {
+        return Arrays.stream(arr)
+            .boxed()
+            .sorted((a, b) -> {
+                int bitCountA = Integer.bitCount(a);
+                int bitCountB = Integer.bitCount(b);
+                
+                if (bitCountA == bitCountB) {
+                    return Integer.compare(a, b);
+                }
+                return Integer.compare(bitCountA, bitCountB);
+            })
+            .mapToInt(Integer::intValue)
+            .toArray();
+    }
+}

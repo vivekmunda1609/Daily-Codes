@@ -1,0 +1,47 @@
+Link : https://leetcode.com/problems/separate-squares-i/?envType=daily-question&envId=2026-05-20
+
+class Solution {
+    public double separateSquares(int[][] squares) {
+        double low = Double.MAX_VALUE;
+        double high = 0;
+        double totalArea = 0;
+        
+        for (int[] sq : squares) {
+            double y = sq[1];
+            double l = sq[2];
+            low = Math.min(low, y);
+            high = Math.max(high, y + l);
+            totalArea += l * l;
+        }
+        
+        double targetArea = totalArea / 2.0;
+        
+        for (int iter = 0; iter < 80; iter++) {
+            double mid = low + (high - low) / 2.0;
+            double areaBelow = getAreaBelow(squares, mid);
+            
+            if (areaBelow >= targetArea) {
+                high = mid; 
+            } else {
+                low = mid;  
+            }
+        }
+        
+        return low;
+    }
+    
+    private double getAreaBelow(int[][] squares, double mid) {
+        double area = 0;
+        for (int[] sq : squares) {
+            double y = sq[1];
+            double l = sq[2];
+            
+            if (y + l <= mid) {
+                area += l * l;
+            } else if (y < mid) {
+                area += (mid - y) * l;
+            }
+        }
+        return area;
+    }
+}

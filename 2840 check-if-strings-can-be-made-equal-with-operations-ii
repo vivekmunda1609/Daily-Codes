@@ -1,0 +1,33 @@
+Link : https://leetcode.com/problems/check-if-strings-can-be-made-equal-with-operations-ii/submissions/?envType=daily-question&envId=2026-05-20
+
+class Solution {
+    public boolean checkStrings(String s1, String s2) {
+        int n = s1.length();
+        
+        // Frequency arrays for lowercase English letters (a-z)
+        int[] evenCount1 = new int[26];
+        int[] evenCount2 = new int[26];
+        int[] oddCount1 = new int[26];
+        int[] oddCount2 = new int[26];
+        
+        // Distribute character frequencies based on index parity
+        for (int i = 0; i < n; i++) {
+            if (i % 2 == 0) {
+                evenCount1[s1.charAt(i) - 'a']++;
+                evenCount2[s2.charAt(i) - 'a']++;
+            } else {
+                oddCount1[s1.charAt(i) - 'a']++;
+                oddCount2[s2.charAt(i) - 'a']++;
+            }
+        }
+        
+        // Check if both the even-indexed sets and odd-indexed sets match perfectly
+        for (int i = 0; i < 26; i++) {
+            if (evenCount1[i] != evenCount2[i] || oddCount1[i] != oddCount2[i]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}

@@ -1,0 +1,24 @@
+import java.util.Arrays;
+
+class Solution {
+    public int maximumJumps(int[] nums, int target) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        
+        // Initialize the array with -1 (unreachable states)
+        Arrays.fill(dp, -1);
+        dp[0] = 0; // Base case: starting point
+        
+        // Compute maximum jumps for each index
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                // Check if index j is reachable and the jump condition is met
+                if (dp[j] != -1 && Math.abs(nums[i] - nums[j]) <= target) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        
+        return dp[n - 1];
+    }
+}

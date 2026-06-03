@@ -1,0 +1,47 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public int minimumPairRemoval(int[] nums) {
+        // Use a dynamic list to easily simulate array compaction/removal
+        List<Integer> arr = new ArrayList<>();
+        for (int x : nums) {
+            arr.add(x);
+        }
+        
+        int operations = 0;
+        
+        // Loop until the array is fully non-decreasing
+        while (!isSorted(arr)) {
+            int minSumIndex = 0;
+            int minSumValue = arr.get(0) + arr.get(1);
+            
+            // Find the adjacent pair with the minimum sum (leftmost tie-breaker built-in via '<')
+            for (int i = 1; i < arr.size() - 1; i++) {
+                int currentPairSum = arr.get(i) + arr.get(i + 1);
+                if (currentPairSum < minSumValue) {
+                    minSumValue = currentPairSum;
+                    minSumIndex = i;
+                }
+            }
+            
+            // Replace the pair with their calculated sum
+            arr.set(minSumIndex, minSumValue);
+            arr.remove(minSumIndex + 1);
+            
+            operations++;
+        }
+        
+        return operations;
+    }
+    
+    // Helper function to check if the array list is non-decreasing
+    private boolean isSorted(List<Integer> arr) {
+        for (int i = 1; i < arr.size(); i++) {
+            if (arr.get(i) < arr.get(i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

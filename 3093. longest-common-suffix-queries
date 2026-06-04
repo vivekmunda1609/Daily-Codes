@@ -1,0 +1,79 @@
+
+class Solution {
+    // Custom Trie Node to track structures and best paths dynamically
+    class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        int minLength = Integer.MAX_VALUE;
+        int bestIndex = -1;
+    }
+
+    private TrieNode root = new TrieNode();
+
+    public int[] stringIndices(String[] wordsContainer, String[] wordsQuery) {
+        int n = wordsContainer.length;
+        int m = wordsQuery.length;
+        int[] ans = new int[m];
+
+        // Step 1: Precompute the global fallback default index at the root node.
+        // If a query shares NO common suffix with any words, it falls back to 
+        // the overall shortest/earliest word in the container.
+        int globalBestIdx = 0;
+        for (int i = 1; i < n; i++) {
+            if (wordsContainer[i].length() < wordsContainer[globalBestIdx].length()) {
+                globalBestIdx = i;
+            }
+        }
+        root.minLength = wordsContainer[globalBestIdx].length();
+        root.bestIndex = globalBestIdx;
+
+        // Step 2: Insert each container word into the Trie in reverse order
+        for (int i = 0; i < n; i++) {
+            insert(wordsContainer[i], i);
+        }
+
+        // Step 3: Query each word in reverse order
+        for (int i = 0; i < m; i++) {
+            ans[i] = search(wordsQuery[i]);
+        }
+
+        return ans;
+    }
+
+    private void insert(String word, int wordIdx) {
+        TrieNode current = root;
+        int len = word.length();
+
+        // Process from end to start (Suffix -> Prefix conversion)
+        for (int i = len - 1; i >= 0; i--) {
+            int charIdx = word.charAt(i) - 'a';
+            if (current.children[charIdx] == null) {
+                current.children[charIdx] = new TrieNode();
+            }
+            current = current.children[charIdx];
+
+            // Tiebreaker: update only if this word is strictly shorter
+            if (len < current.minLength) {
+                current.minLength = len;
+                current.bestIndex = wordIdx;
+            }
+        }
+    }
+
+    private int search(String query) {
+        TrieNode current = root;
+        int len = query.length();
+        int lastValidBestIndex = root.bestIndex;
+
+        // Traverse matching suffixes down the tree
+        for (int i = len - 1; i >= 0; i--) {
+            int charIdx = query.charAt(i) - 'a';
+            if (current.children[charIdx] == null) {
+                break; // Mismatch encountered, stop descending
+            }
+            current = current.children[charIdx];
+            lastValidBestIndex = current.bestIndex;
+        }
+
+        return lastValidBestIndex;
+    }
+}

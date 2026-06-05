@@ -1,0 +1,32 @@
+class Solution {
+    public int earliestFinishTime(int[] landStartTime, int[] landDuration, int[] waterStartTime, int[] waterDuration) {
+        // Evaluate both sequence paths and return the minimum possible finish time
+        int path1 = calculatePath(landStartTime, landDuration, waterStartTime, waterDuration);
+        int path2 = calculatePath(waterStartTime, waterDuration, landStartTime, landDuration);
+        
+        return Math.min(path1, path2);
+    }
+    
+    // Helper method to simulate a fixed sequence: Category 1 -> Category 2
+    private int calculatePath(int[] start1, int[] duration1, int[] start2, int[] duration2) {
+        int earliestFirstFinish = Integer.MAX_VALUE;
+        
+        // Step 1: Find the absolute earliest time we can finish a ride in Category 1
+        for (int i = 0; i < start1.length; i++) {
+            earliestFirstFinish = Math.min(earliestFirstFinish, start1[i] + duration1[i]);
+        }
+        
+        int totalMinFinishTime = Integer.MAX_VALUE;
+        
+        // Step 2: Use that time to transition into the best options for Category 2
+        for (int i = 0; i < start2.length; i++) {
+            // The ride cannot start until its own opening time or our arrival time (whichever is later)
+            int currentRideStart = Math.max(earliestFirstFinish, start2[i]);
+            int currentRideFinish = currentRideStart + duration2[i];
+            
+            totalMinFinishTime = Math.min(totalMinFinishTime, currentRideFinish);
+        }
+        
+        return totalMinFinishTime;
+    }
+}

@@ -1,0 +1,28 @@
+class Solution {
+    public int[] leftRightDifference(int[] nums) {
+        int n = nums.length;
+        int[] answer = new int[n];
+        
+        // 1. Calculate the total sum of the array
+        int rightSum = 0;
+        for (int num : nums) {
+            rightSum += num;
+        }
+        
+        int leftSum = 0;
+        
+        // 2. Compute the differences on the fly
+        for (int i = 0; i < n; i++) {
+            // rightSum for index i excludes the current element
+            rightSum -= nums[i]; 
+            
+            // Calculate absolute difference
+            answer[i] = Math.abs(leftSum - rightSum);
+            
+            // Update leftSum for the next iteration
+            leftSum += nums[i];
+        }
+        
+        return answer;
+    }
+}

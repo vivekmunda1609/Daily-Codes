@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        # Maps node value -> TreeNode object
+        nodes = {}
+        # Keeps track of all values that are children
+        children = set()
+        
+        for parent_val, child_val, is_left in descriptions:
+            # Create parent node if it doesn't exist
+            if parent_val not in nodes:
+                nodes[parent_val] = TreeNode(parent_val)
+            # Create child node if it doesn't exist
+            if child_val not in nodes:
+                nodes[child_val] = TreeNode(child_val)
+                
+            # Connect the parent to the child
+            if is_left == 1:
+                nodes[parent_val].left = nodes[child_val]
+            else:
+                nodes[parent_val].right = nodes[child_val]
+                
+            # Record that this node is a child
+            children.add(child_val)
+            
+        # The root is the parent node that is NOT in the children set
+        for parent_val, _, _ in descriptions:
+            if parent_val not in children:
+                return nodes[parent_val]
+                
+        return None

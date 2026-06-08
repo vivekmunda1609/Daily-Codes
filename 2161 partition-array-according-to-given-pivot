@@ -1,0 +1,37 @@
+class Solution {
+    public int[] pivotArray(int[] nums, int pivot) {
+        int n = nums.length;
+        int[] ans = new int[n];
+        
+        // Count how many elements are strictly less than the pivot
+        // and how many are exactly equal to the pivot.
+        int lessCount = 0;
+        int equalCount = 0;
+        
+        for (int num : nums) {
+            if (num < pivot) {
+                lessCount++;
+            } else if (num == pivot) {
+                equalCount++;
+            }
+        }
+        
+        // Set the starting insert positions for each of the three groups
+        int lessPtr = 0;
+        int equalPtr = lessCount;
+        int greaterPtr = lessCount + equalCount;
+        
+        // Fill the answer array while preserving the original relative order
+        for (int num : nums) {
+            if (num < pivot) {
+                ans[lessPtr++] = num;
+            } else if (num == pivot) {
+                ans[equalPtr++] = num;
+            } else {
+                ans[greaterPtr++] = num;
+            }
+        }
+        
+        return ans;
+    }
+}
